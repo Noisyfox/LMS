@@ -136,6 +136,9 @@ INSTALLED_APPS = [
 
     # project
     "LMS",
+    "LMS_Admin",
+    "LMS_Student",
+    "LMS_Teacher"
 ]
 
 # A sample logging configuration. The only tangible logging
