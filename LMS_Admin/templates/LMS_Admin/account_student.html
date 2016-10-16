@@ -1,0 +1,21 @@
+{% extends 'LMS_Admin/nav_base.html' %}
+
+{% load i18n %}
+
+{% block body_class %}admin admin-account_student{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <a class="btn btn-primary" href="{% url 'lms_admin:account_student_create' %}">{% trans "Create Student" %}</a>
+    </div>
+    {% if students %}
+        <div class="row">
+            <ul class="list-group">
+                {% for s in students %}
+                    <a href="{% url "lms_admin:account_student_edit" s.pk %}"
+                       class="list-group-item list-group-item-action">{{ s }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
