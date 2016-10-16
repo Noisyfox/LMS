@@ -4,8 +4,8 @@ from django.utils.datetime_safe import date
 from django.views.generic import FormView
 from django.views.generic import ListView
 
-from LMS.models import Student
-from LMS_Admin.forms import StudentEditForm
+from LMS.models import Student, Teacher
+from LMS_Admin.forms import StudentEditForm, TeacherEditForm
 from LMS_Admin.models import UidGen
 
 
@@ -109,5 +109,97 @@ class StudentEditView(FormView):
         student.course = form.cleaned_data['course']
         student.start_date = form.cleaned_data['start_date']
         student.save()
+
+        return super().form_valid(form)
+
+
+class AdminTeacherListView(ListView):
+    template_name = 'LMS_Admin/account_teacher.html'
+    allow_empty = True
+    model = Teacher
+    context_object_name = 'teachers'
+
+
+class TeacherCreateView(FormView):
+    template_name = 'LMS_Admin/account_teacher_edit.html'
+    form_class = TeacherEditForm
+    success_url = reverse_lazy('lms_admin:account_teacher')
+
+    def get_initial(self):
+        init = super().get_initial()
+
+        init.update({
+            'gender': 'm',
+        })
+
+        return init
+
+    def form_valid(self, form):
+        User = get_user_model()
+        user = User()
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        user.username = generate_uid(first_name, last_name)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.set_password(form.cleaned_data['password'])
+        user.is_staff = True
+        user.save()
+
+        try:
+            teacher = Teacher(user=user)
+            teacher.title = form.cleaned_data['title']
+            teacher.gender = form.cleaned_data['gender']
+            teacher.faculty = form.cleaned_data['faculty']
+            teacher.save()
+        except Exception:
+            user.delete()
+            raise
+
+        return super().form_valid(form)
+
+
+class TeacherEditView(FormView):
+    template_name = 'LMS_Admin/account_teacher_edit.html'
+    form_class = TeacherEditForm
+    success_url = reverse_lazy('lms_admin:account_teacher')
+
+    def get_object(self):
+        return Teacher.objects.get(pk=self.kwargs['pk'])
+
+    def get_initial(self):
+        init = super().get_initial()
+
+        teacher = self.get_object()
+
+        init.update({
+            'title': teacher.title,
+            'first_name': teacher.user.first_name,
+            'last_name': teacher.user.last_name,
+            'gender': teacher.gender,
+            'faculty': teacher.faculty
+        })
+
+        return init
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['password'].required = False
+        return form
+
+    def form_valid(self, form):
+        teacher = self.get_object()
+        user = teacher.user
+
+        user.first_name = form.cleaned_data['first_name']
+        user.last_name = form.cleaned_data['last_name']
+        if 'password' in form.cleaned_data:
+            user.set_password(form.cleaned_data['password'])
+        user.save()
+
+        teacher.title = form.cleaned_data['title']
+        teacher.gender = form.cleaned_data['gender']
+        teacher.faculty = form.cleaned_data['faculty']
+        teacher.save()
 
         return super().form_valid(form)

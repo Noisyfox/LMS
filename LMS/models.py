@@ -39,10 +39,20 @@ class Student(models.Model):
         return self.user.username
 
 
+TITLES = (
+    ('Mr', 'Mr'),
+    ('Mrs', 'Mrs'),
+    ('Ms', 'Ms'),
+    ('Miss', 'Miss'),
+    ('Prof', 'Prof'),
+    ('Dr', 'Dr'),
+)
+
+
 class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDERS)
-    title = models.CharField(max_length=32)
+    title = models.CharField(max_length=32, choices=TITLES)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
 
     def __str__(self):
