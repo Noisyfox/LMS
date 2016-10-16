@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import date
+from django.views.generic import CreateView
 from django.views.generic import FormView
 from django.views.generic import ListView
+from django.views.generic import UpdateView
 
-from LMS.models import Student, Teacher
+from LMS.models import Student, Teacher, Unit
 from LMS_Admin.forms import StudentEditForm, TeacherEditForm
 from LMS_Admin.models import UidGen
 
@@ -203,3 +205,33 @@ class TeacherEditView(FormView):
         teacher.save()
 
         return super().form_valid(form)
+
+
+class AdminUnitListView(ListView):
+    template_name = 'LMS_Admin/unit.html'
+    allow_empty = True
+    model = Unit
+    context_object_name = 'units'
+
+
+class UnitCreateView(CreateView):
+    template_name = 'LMS_Admin/unit_edit.html'
+    model = Unit
+    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'coordinator', 'description', 'location']
+    success_url = reverse_lazy('lms_admin:unit')
+
+    def get_initial(self):
+        init = super().get_initial()
+
+        init.update({
+            'year': date.today().year
+        })
+
+        return init
+
+
+class UnitEditView(UpdateView):
+    template_name = 'LMS_Admin/unit_edit.html'
+    model = Unit
+    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'coordinator', 'description', 'location']
+    success_url = reverse_lazy('lms_admin:unit')

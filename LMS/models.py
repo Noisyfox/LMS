@@ -68,3 +68,6 @@ class Unit(models.Model):
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name

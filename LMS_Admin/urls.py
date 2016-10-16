@@ -18,5 +18,10 @@ urlpatterns = [
             url(r'^new/$', views.TeacherCreateView.as_view(), name='account_teacher_create'),
             url(r'^(?P<pk>[0-9]+)/$', views.TeacherEditView.as_view(), name='account_teacher_edit'),
         ])),
+        url(r'^unit/', include([
+            url(r'^$', views.AdminUnitListView.as_view(), name='unit'),
+            url(r'^new/$', views.UnitCreateView.as_view(), name='unit_create'),
+            url(r'^(?P<pk>[0-9]+)/$', views.UnitEditView.as_view(), name='unit_edit'),
+        ])),
     ])),
 ]
