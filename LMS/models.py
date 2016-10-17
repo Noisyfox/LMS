@@ -61,7 +61,6 @@ class Teacher(models.Model):
 
 class Unit(models.Model):
     name = models.CharField(max_length=128)
-    coordinator = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     year = models.IntegerField()
     session = models.IntegerField(choices=((1, 'S1'), (2, 'S2')))
     credit_point = models.FloatField()
@@ -69,5 +68,21 @@ class Unit(models.Model):
     description = models.TextField(blank=True)
     location = models.CharField(max_length=512)
 
+    staff = models.ManyToManyField(Teacher, through='UnitAllocation')
+
     def __str__(self):
         return self.name
+
+
+class UnitAllocation(models.Model):
+    ROLES = (
+        ('c', 'Coordinator'),
+        ('l', 'Lecturer'),
+        ('t', 'Tutor')
+    )
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    role = models.CharField(max_length=1, choices=ROLES)
+
+    def __str__(self):
+        return '%s as %s' % (self.teacher.user.username, self.get_role_display())

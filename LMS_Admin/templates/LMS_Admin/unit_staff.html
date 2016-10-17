@@ -1,0 +1,21 @@
+{% extends 'LMS_Admin/nav_base.html' %}
+
+{% load i18n %}
+
+{% block body_class %}admin admin-units{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <a class="btn btn-primary" href="{% url 'lms_admin:unit_staff_add' unit.pk %}">{% trans "Add Staff" %}</a>
+    </div>
+    {% if allocations %}
+        <div class="row">
+            <ul class="list-group">
+                {% for alloc in allocations %}
+                    <a href="{% url 'lms_admin:unit_staff_edit' unit.pk alloc.pk %}"
+                       class="list-group-item list-group-item-action">{{ alloc }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

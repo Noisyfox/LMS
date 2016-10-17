@@ -1,12 +1,17 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import date
 from django.views.generic import CreateView
+from django.views.generic import DeleteView
 from django.views.generic import FormView
 from django.views.generic import ListView
 from django.views.generic import UpdateView
 
-from LMS.models import Student, Teacher, Unit
+from LMS.mixins import QueryMixin
+from LMS.models import Student, Teacher, Unit, UnitAllocation
 from LMS_Admin.forms import StudentEditForm, TeacherEditForm
 from LMS_Admin.models import UidGen
 
@@ -217,7 +222,7 @@ class AdminUnitListView(ListView):
 class UnitCreateView(CreateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
-    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'coordinator', 'description', 'location']
+    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
     success_url = reverse_lazy('lms_admin:unit')
 
     def get_initial(self):
@@ -233,5 +238,99 @@ class UnitCreateView(CreateView):
 class UnitEditView(UpdateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
-    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'coordinator', 'description', 'location']
+    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
     success_url = reverse_lazy('lms_admin:unit')
+    pk_url_kwarg = 'unit_id'
+
+
+class UnitQueryMixin(QueryMixin):
+    def do_query(self, request, *args, **kwargs):
+        unit = get_object_or_404(Unit, pk=kwargs['unit_id'])
+
+        self._unit = unit
+
+    @property
+    def unit(self):
+        if not self._unit:
+            raise Http404('Unknown unit.')
+
+        return self._unit
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UnitQueryMixin, self).get_context_data(**kwargs)
+
+        ctx['unit'] = self._unit
+
+        return ctx
+
+
+class AllocQueryMixin(UnitQueryMixin):
+    def do_query(self, request, *args, **kwargs):
+        super().do_query(request, *args, **kwargs)
+
+        alloc = get_object_or_404(UnitAllocation, pk=kwargs['alloc_id'])
+
+        if alloc.unit != self.unit:
+            raise Http404('Unknown staff.')
+
+        self._alloc = alloc
+
+    @property
+    def allocation(self):
+        if not self._alloc:
+            raise Http404('Unknown staff.')
+
+        return self._alloc
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AllocQueryMixin, self).get_context_data(**kwargs)
+
+        ctx['alloc'] = self._alloc
+
+        return ctx
+
+
+class StaffListView(UnitQueryMixin, ListView):
+    template_name = 'LMS_Admin/unit_staff.html'
+    allow_empty = True
+    context_object_name = 'allocations'
+
+    def get_queryset(self):
+        return UnitAllocation.objects.filter(unit=self.unit)
+
+
+class StaffAddView(UnitQueryMixin, CreateView):
+    template_name = 'LMS_Admin/unit_staff_edit.html'
+    model = UnitAllocation
+    fields = ['teacher', 'role']
+
+    def form_valid(self, form):
+        allocation = form.save(commit=False)
+        allocation.unit = self.unit
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})
+
+
+class StaffEditView(AllocQueryMixin, UpdateView):
+    template_name = 'LMS_Admin/unit_staff_edit.html'
+    model = UnitAllocation
+    fields = ['teacher', 'role']
+
+    def get_object(self, queryset=None):
+        return self.allocation
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})
+
+
+class StaffDeleteView(AllocQueryMixin, DeleteView):
+    template_name = 'LMS_Admin/unit_staff_delete.html'
+
+    def get_object(self, queryset=None):
+        return self.allocation
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})

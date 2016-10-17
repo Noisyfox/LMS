@@ -13,17 +13,12 @@
                 {% csrf_token %}
                 {{ form|bootstrap }}
                 {% if object %}
-                    <a class="btn btn-default form-control" href="{% url 'lms_admin:unit_staff' unit.pk %}">
-                        <i class="glyphicon glyphicon-user"></i>{% trans "Manage Staff" %}
-                    </a>
-                    <br>
-                    <br>
-                    <a class="btn btn-danger" href="">
+                    <a class="btn btn-danger" href="{% url 'lms_admin:unit_staff_delete' unit.pk alloc.pk %}">
                         <i class="glyphicon glyphicon-trash"></i>{% trans "Delete" %}
                     </a>
                 {% endif %}
                 <a class="btn btn-default pull-right"
-                   href="{% url 'lms_admin:unit' %}">{% trans "Cancel" %}</a>
+                   href="{% url 'lms_admin:unit_staff' unit.pk  %}">{% trans "Cancel" %}</a>
                 <button type="submit" class="btn btn-primary pull-right">{% trans "Submit" %}</button>
             </form>
         </div>
