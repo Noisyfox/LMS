@@ -3,16 +3,16 @@
 {% load i18n %}
 {% load bootstrap %}
 
-{% block body_class %}tec tec-unit-material{% endblock %}
+{% block body_class %}tec tec-unit-assignment{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-md-5">
             <form method="POST">
                 {% csrf_token %}
-                <p>Are you sure you want to delete "{{ material }}"?</p>
+                <p>Are you sure you want to delete "{{ assignment }}"?</p>
                 <a class="btn btn-default pull-right"
-                   href="{% url 'lms_tec:material_edit' unit.pk material.pk %}">{% trans "Cancel" %}</a>
+                   href="{% url 'lms_tec:assignment_edit' unit.pk assignment.pk %}">{% trans "Cancel" %}</a>
                 <button type="submit" class="btn btn-danger pull-right">{% trans "Confirm" %}</button>
             </form>
         </div>

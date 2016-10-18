@@ -136,6 +136,8 @@ INSTALLED_APPS = [
     "pinax.eventlog",
     "pinax.webanalytics",
 
+    "bootstrap3_datetime",
+
     # project
     "LMS",
     "LMS_Admin",

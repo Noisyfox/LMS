@@ -5,24 +5,24 @@
 {% block body_class %}teacher{% endblock %}
 
 {% block subnav %}
-<div class="panel panel-default">
-{#    <div class="panel-heading"><strong>{% trans "Account Management" %}</strong></div>#}
-    <div class="list-group">
-        <a class="list-group-item tec-unit-info" href="{% url "lms_tec:unit_info" unit.pk %}">
-            {% trans "Unit Information" %}
-        </a>
-        <a class="list-group-item tec-unit-material" href="{% url 'lms_tec:material' unit.pk %}">
-            {% trans "Materials" %}
-        </a>
-        <a class="list-group-item tec-unit-assignment" href="{% url 'lms_admin:account_teacher' %}">
-            {% trans "Assignments" %}
-        </a>
-        <a class="list-group-item tec-unit-grade" href="{% url 'lms_admin:account_teacher' %}">
-            {% trans "Grades" %}
-        </a>
-        <a class="list-group-item tec-unit-mail" href="{% url 'lms_admin:account_teacher' %}">
-            {% trans "Mail" %}
-        </a>
+    <div class="panel panel-default">
+        {#    <div class="panel-heading"><strong>{% trans "Account Management" %}</strong></div>#}
+        <div class="list-group">
+            <a class="list-group-item tec-unit-info" href="{% url "lms_tec:unit_info" unit.pk %}">
+                {% trans "Unit Information" %}
+            </a>
+            <a class="list-group-item tec-unit-material" href="{% url 'lms_tec:material' unit.pk %}">
+                {% trans "Materials" %}
+            </a>
+            <a class="list-group-item tec-unit-assignment" href="{% url 'lms_tec:assignment' unit.pk %}">
+                {% trans "Assignments" %}
+            </a>
+            <a class="list-group-item tec-unit-grade" href="{% url 'lms_admin:account_teacher' %}">
+                {% trans "Grades" %}
+            </a>
+            <a class="list-group-item tec-unit-mail" href="{% url 'lms_admin:account_teacher' %}">
+                {% trans "Mail" %}
+            </a>
+        </div>
     </div>
-</div>
 {% endblock %}

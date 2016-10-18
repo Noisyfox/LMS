@@ -11,3 +11,5 @@ pip install -r requirements.txt
 ./manage.py loaddata sites
 ./manage.py runserver
 ```
+
+pip install git+https://github.com/nkunihiko/django-bootstrap3-datetimepicker.git

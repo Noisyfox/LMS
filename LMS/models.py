@@ -97,3 +97,24 @@ class Material(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Assignment(models.Model):
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
+    publish_time = models.DateTimeField(auto_now_add=True)
+    due_time = models.DateTimeField()
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class AssignmentFile(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    uploader = models.ForeignKey(Student, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
+    upload_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

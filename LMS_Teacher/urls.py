@@ -16,5 +16,14 @@ urlpatterns = [
                 url(r'^delete/$', views.MaterialDeleteView.as_view(), name='material_delete'),
             ])),
         ])),
+        url(r'^assignment/', include([
+            url(r'^$', views.AssignmentListView.as_view(), name='assignment'),
+            url(r'^create/$', views.AssignmentCreateView.as_view(), name='assignment_create'),
+            url(r'^(?P<assignment_id>[0-9]+)/', include([
+                url(r'^$', views.AssignmentEditView.as_view(), name='assignment_files'),
+                url(r'^edit/$', views.AssignmentEditView.as_view(), name='assignment_edit'),
+                url(r'^delete/$', views.AssignmentDeleteView.as_view(), name='assignment_delete'),
+            ])),
+        ])),
     ]))
 ]

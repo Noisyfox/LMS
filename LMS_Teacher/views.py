@@ -9,7 +9,8 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material
+from LMS.models import Unit, Material, Assignment
+from LMS_Teacher.forms import AssignmentForm
 from LMS_Teacher.mixins import TeacherMixin
 
 
@@ -53,6 +54,29 @@ class MaterialQueryMixin(UnitQueryMixin):
         ctx = super(MaterialQueryMixin, self).get_context_data(**kwargs)
 
         ctx['material'] = self._material
+
+        return ctx
+
+
+class AssignmentQueryMixin(UnitQueryMixin):
+    def do_query(self, request, *args, **kwargs):
+        super(AssignmentQueryMixin, self).do_query(request, *args, **kwargs)
+
+        assignment = get_object_or_404(Assignment, Q(unit=self.unit) & Q(pk=kwargs['assignment_id']))
+
+        self._assignment = assignment
+
+    @property
+    def assignment(self):
+        if not self._assignment:
+            raise Http404('Unknown assignment.')
+
+        return self._assignment
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AssignmentQueryMixin, self).get_context_data(**kwargs)
+
+        ctx['assignment'] = self._assignment
 
         return ctx
 
@@ -117,3 +141,46 @@ class MaterialDeleteView(TeacherMixin, MaterialQueryMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('lms_tec:material', kwargs={'unit_id': self.unit.pk})
+
+
+class AssignmentListView(TeacherMixin, UnitQueryMixin, ListView):
+    template_name = 'LMS_Teacher/unit_assignment.html'
+    context_object_name = 'assignments'
+    allow_empty = True
+
+    def get_queryset(self):
+        return Assignment.objects.filter(unit=self.unit)
+
+
+class AssignmentCreateView(TeacherMixin, UnitQueryMixin, CreateView):
+    template_name = 'LMS_Teacher/unit_assignment_edit.html'
+    form_class = AssignmentForm
+
+    def form_valid(self, form):
+        mat = form.save(commit=False)
+        mat.unit = self.unit
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('lms_tec:assignment', kwargs={'unit_id': self.unit.pk})
+
+
+class AssignmentEditView(TeacherMixin, AssignmentQueryMixin, UpdateView):
+    template_name = 'LMS_Teacher/unit_assignment_edit.html'
+    form_class = AssignmentForm
+
+    def get_object(self, queryset=None):
+        return self.assignment
+
+    def get_success_url(self):
+        return reverse_lazy('lms_tec:assignment', kwargs={'unit_id': self.unit.pk})
+
+
+class AssignmentDeleteView(TeacherMixin, AssignmentQueryMixin, DeleteView):
+    template_name = 'LMS_Teacher/unit_assignment_delete.html'
+
+    def get_object(self, queryset=None):
+        return self.assignment
+
+    def get_success_url(self):
+        return reverse_lazy('lms_tec:assignment', kwargs={'unit_id': self.unit.pk})
