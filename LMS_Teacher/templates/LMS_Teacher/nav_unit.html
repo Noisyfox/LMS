@@ -11,7 +11,7 @@
         <a class="list-group-item tec-unit-info" href="{% url "lms_tec:unit_info" unit.pk %}">
             {% trans "Unit Information" %}
         </a>
-        <a class="list-group-item tec-unit-material" href="{% url 'lms_admin:account_teacher' %}">
+        <a class="list-group-item tec-unit-material" href="{% url 'lms_tec:material' unit.pk %}">
             {% trans "Materials" %}
         </a>
         <a class="list-group-item tec-unit-assignment" href="{% url 'lms_admin:account_teacher' %}">

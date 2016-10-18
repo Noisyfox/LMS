@@ -86,3 +86,14 @@ class UnitAllocation(models.Model):
 
     def __str__(self):
         return '%s as %s' % (self.teacher.user.username, self.get_role_display())
+
+
+class Material(models.Model):
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    uploader = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
+    file = models.FileField()
+    upload_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
