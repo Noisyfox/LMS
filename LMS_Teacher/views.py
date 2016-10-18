@@ -9,7 +9,7 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material, Assignment
+from LMS.models import Unit, Material, Assignment, AssignmentFile
 from LMS_Teacher.forms import AssignmentForm
 from LMS_Teacher.mixins import TeacherMixin
 
@@ -184,3 +184,12 @@ class AssignmentDeleteView(TeacherMixin, AssignmentQueryMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('lms_tec:assignment', kwargs={'unit_id': self.unit.pk})
+
+
+class AssignmentFileListView(TeacherMixin, AssignmentQueryMixin, ListView):
+    template_name = 'LMS_Teacher/unit_assignment_file.html'
+    context_object_name = 'files'
+    allow_empty = True
+
+    def get_queryset(self):
+        return AssignmentFile.objects.filter(assignment=self.assignment)

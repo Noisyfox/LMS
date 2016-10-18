@@ -1,0 +1,21 @@
+{% extends 'LMS_Teacher/nav_unit.html' %}
+
+{% load i18n %}
+
+{% block body_class %}tec tec-unit-assignment{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <a class="btn btn-primary" href="{% url 'lms_tec:assignment_edit' unit.pk assignment.pk %}">{% trans "Edit Assignment" %}</a>
+    </div>
+    {% if files %}
+        <div class="row">
+            <ul class="list-group">
+                {% for f in files %}
+                    <a href=""
+                       class="list-group-item list-group-item-action">{{ f }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
