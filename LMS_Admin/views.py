@@ -13,6 +13,7 @@ from django.views.generic import UpdateView
 from LMS.mixins import QueryMixin
 from LMS.models import Student, Teacher, Unit, UnitAllocation
 from LMS_Admin.forms import StudentEditForm, TeacherEditForm
+from LMS_Admin.mixins import AdminMixin
 from LMS_Admin.models import UidGen
 
 
@@ -25,14 +26,14 @@ def generate_uid(first_name, last_name):
     return '%s%s%04d' % (first_name[:2].lower(), last_name[:2].lower(), uid)
 
 
-class AdminStudentListView(ListView):
+class AdminStudentListView(AdminMixin, ListView):
     template_name = 'LMS_Admin/account_student.html'
     allow_empty = True
     model = Student
     context_object_name = 'students'
 
 
-class StudentCreateView(FormView):
+class StudentCreateView(AdminMixin, FormView):
     template_name = 'LMS_Admin/account_student_edit.html'
     form_class = StudentEditForm
     success_url = reverse_lazy('lms_admin:account_student')
@@ -72,7 +73,7 @@ class StudentCreateView(FormView):
         return super().form_valid(form)
 
 
-class StudentEditView(FormView):
+class StudentEditView(AdminMixin, FormView):
     template_name = 'LMS_Admin/account_student_edit.html'
     form_class = StudentEditForm
     success_url = reverse_lazy('lms_admin:account_student')
@@ -120,14 +121,14 @@ class StudentEditView(FormView):
         return super().form_valid(form)
 
 
-class AdminTeacherListView(ListView):
+class AdminTeacherListView(AdminMixin, ListView):
     template_name = 'LMS_Admin/account_teacher.html'
     allow_empty = True
     model = Teacher
     context_object_name = 'teachers'
 
 
-class TeacherCreateView(FormView):
+class TeacherCreateView(AdminMixin, FormView):
     template_name = 'LMS_Admin/account_teacher_edit.html'
     form_class = TeacherEditForm
     success_url = reverse_lazy('lms_admin:account_teacher')
@@ -166,7 +167,7 @@ class TeacherCreateView(FormView):
         return super().form_valid(form)
 
 
-class TeacherEditView(FormView):
+class TeacherEditView(AdminMixin, FormView):
     template_name = 'LMS_Admin/account_teacher_edit.html'
     form_class = TeacherEditForm
     success_url = reverse_lazy('lms_admin:account_teacher')
@@ -212,14 +213,14 @@ class TeacherEditView(FormView):
         return super().form_valid(form)
 
 
-class AdminUnitListView(ListView):
+class AdminUnitListView(AdminMixin, ListView):
     template_name = 'LMS_Admin/unit.html'
     allow_empty = True
     model = Unit
     context_object_name = 'units'
 
 
-class UnitCreateView(CreateView):
+class UnitCreateView(AdminMixin, CreateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
     fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
@@ -235,7 +236,7 @@ class UnitCreateView(CreateView):
         return init
 
 
-class UnitEditView(UpdateView):
+class UnitEditView(AdminMixin, UpdateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
     fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
@@ -290,7 +291,7 @@ class AllocQueryMixin(UnitQueryMixin):
         return ctx
 
 
-class StaffListView(UnitQueryMixin, ListView):
+class StaffListView(AdminMixin, UnitQueryMixin, ListView):
     template_name = 'LMS_Admin/unit_staff.html'
     allow_empty = True
     context_object_name = 'allocations'
@@ -299,7 +300,7 @@ class StaffListView(UnitQueryMixin, ListView):
         return UnitAllocation.objects.filter(unit=self.unit)
 
 
-class StaffAddView(UnitQueryMixin, CreateView):
+class StaffAddView(AdminMixin, UnitQueryMixin, CreateView):
     template_name = 'LMS_Admin/unit_staff_edit.html'
     model = UnitAllocation
     fields = ['teacher', 'role']
@@ -314,7 +315,7 @@ class StaffAddView(UnitQueryMixin, CreateView):
         return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})
 
 
-class StaffEditView(AllocQueryMixin, UpdateView):
+class StaffEditView(AdminMixin, AllocQueryMixin, UpdateView):
     template_name = 'LMS_Admin/unit_staff_edit.html'
     model = UnitAllocation
     fields = ['teacher', 'role']
@@ -326,7 +327,7 @@ class StaffEditView(AllocQueryMixin, UpdateView):
         return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})
 
 
-class StaffDeleteView(AllocQueryMixin, DeleteView):
+class StaffDeleteView(AdminMixin, AllocQueryMixin, DeleteView):
     template_name = 'LMS_Admin/unit_staff_delete.html'
 
     def get_object(self, queryset=None):

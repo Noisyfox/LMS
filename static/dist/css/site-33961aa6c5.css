@@ -8898,6 +8898,19 @@ body.admin-units .admin-units {
   background-color: #337ab7;
   border-color: #337ab7;
 }
+body.tec-info .tec-info,
+body.tec-unit .tec-unit,
+body.tec-timetable .tec-timetable,
+body.tec-unit-info .tec-unit-info,
+body.tec-unit-material .tec-unit-material,
+body.tec-unit-assignment .tec-unit-assignment,
+body.tec-unit-grade .tec-unit-grade,
+body.tec-unit-mail .tec-unit-mail {
+  z-index: 2;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
 body {
   padding-top: 50px;
   position: relative;
