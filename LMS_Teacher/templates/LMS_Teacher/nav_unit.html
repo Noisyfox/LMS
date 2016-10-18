@@ -8,7 +8,7 @@
 <div class="panel panel-default">
 {#    <div class="panel-heading"><strong>{% trans "Account Management" %}</strong></div>#}
     <div class="list-group">
-        <a class="list-group-item tec-unit-info" href="{% url 'lms_admin:account_student' %}">
+        <a class="list-group-item tec-unit-info" href="{% url "lms_tec:unit_info" unit.pk %}">
             {% trans "Unit Information" %}
         </a>
         <a class="list-group-item tec-unit-material" href="{% url 'lms_admin:account_teacher' %}">
