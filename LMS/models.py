@@ -76,6 +76,33 @@ class Unit(models.Model):
         return self.name
 
 
+DAY_OF_WEEK = (
+    (1, 'Monday'),
+    (2, 'Tuesday'),
+    (3, 'Wednesday'),
+    (4, 'Thursday'),
+    (5, 'Friday'),
+    (6, 'Saturday'),
+    (7, 'Sunday'),
+)
+
+
+class Class(models.Model):
+    TYPE = (
+        ('l', 'Lecture'),
+        ('t', 'Tutorial'),
+        ('b', 'Lab')
+    )
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    day = models.PositiveSmallIntegerField(choices=DAY_OF_WEEK)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    start_week = models.PositiveSmallIntegerField()
+    end_week = models.PositiveSmallIntegerField()
+    type = models.CharField(max_length=1, choices=TYPE)
+    location = models.CharField(max_length=128)
+
+
 class UnitAllocation(models.Model):
     ROLES = (
         ('c', 'Coordinator'),

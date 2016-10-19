@@ -11,8 +11,8 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
-from LMS.models import Student, Teacher, Unit, UnitAllocation
-from LMS_Admin.forms import StudentEditForm, TeacherEditForm
+from LMS.models import Student, Teacher, Unit, UnitAllocation, Class
+from LMS_Admin.forms import StudentEditForm, TeacherEditForm, ClassForm
 from LMS_Admin.mixins import AdminMixin
 from LMS_Admin.models import UidGen
 
@@ -291,6 +291,32 @@ class AllocQueryMixin(UnitQueryMixin):
         return ctx
 
 
+class ClassQueryMixin(UnitQueryMixin):
+    def do_query(self, request, *args, **kwargs):
+        super().do_query(request, *args, **kwargs)
+
+        _class = get_object_or_404(Class, pk=kwargs['class_id'])
+
+        if _class.unit != self.unit:
+            raise Http404('Unknown class.')
+
+        self._class = _class
+
+    @property
+    def clazz(self):
+        if not self._class:
+            raise Http404('Unknown staff.')
+
+        return self._class
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ClassQueryMixin, self).get_context_data(**kwargs)
+
+        ctx['class'] = self._class
+
+        return ctx
+
+
 class StaffListView(AdminMixin, UnitQueryMixin, ListView):
     template_name = 'LMS_Admin/unit_staff.html'
     allow_empty = True
@@ -335,3 +361,47 @@ class StaffDeleteView(AdminMixin, AllocQueryMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('lms_admin:unit_staff', kwargs={'unit_id': self.unit.pk})
+
+
+class ClassListView(AdminMixin, UnitQueryMixin, ListView):
+    template_name = 'LMS_Admin/unit_class.html'
+    allow_empty = True
+    context_object_name = 'classes'
+
+    def get_queryset(self):
+        return Class.objects.filter(unit=self.unit)
+
+
+class ClassAddView(AdminMixin, UnitQueryMixin, CreateView):
+    template_name = 'LMS_Admin/unit_class_edit.html'
+    form_class = ClassForm
+
+    def form_valid(self, form):
+        _class = form.save(commit=False)
+        _class.unit = self.unit
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_class', kwargs={'unit_id': self.unit.pk})
+
+
+class ClassEditView(AdminMixin, ClassQueryMixin, UpdateView):
+    template_name = 'LMS_Admin/unit_class_edit.html'
+    form_class = ClassForm
+
+    def get_object(self, queryset=None):
+        return self.clazz
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_class', kwargs={'unit_id': self.unit.pk})
+
+
+class ClassDeleteView(AdminMixin, ClassQueryMixin, DeleteView):
+    template_name = 'LMS_Admin/unit_class_delete.html'
+
+    def get_object(self, queryset=None):
+        return self.clazz
+
+    def get_success_url(self):
+        return reverse_lazy('lms_admin:unit_class', kwargs={'unit_id': self.unit.pk})

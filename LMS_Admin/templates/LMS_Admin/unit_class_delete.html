@@ -1,0 +1,22 @@
+{% extends 'LMS_Admin/nav_base.html' %}
+
+{% load i18n %}
+{% load bootstrap %}
+
+{% block body_class %}admin admin-units{% endblock %}
+{% block head_title %}{{ head_title }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-5">
+            <form method="POST">
+                {% csrf_token %}
+                <p>Are you sure you want to delete "{{ class }}"?</p>
+                <a class="btn btn-default pull-right"
+                   href="{% url 'lms_admin:unit_class_edit' unit.pk class.pk %}">{% trans "Cancel" %}</a>
+                <button type="submit" class="btn btn-danger pull-right">{% trans "Confirm" %}</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
