@@ -1,0 +1,18 @@
+{% extends 'LMS_Student/nav_unit.html' %}
+
+{% load i18n %}
+
+{% block body_class %}stu stu-unit-material{% endblock %}
+
+{% block body %}
+    {% if materials %}
+        <div class="row">
+            <ul class="list-group">
+                {% for m in materials %}
+                    <a href="{% url 'lms_stu:material_download' unit.pk m.pk %}"
+                       class="list-group-item list-group-item-action">{{ m }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

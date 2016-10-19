@@ -96,6 +96,7 @@ class Material(models.Model):
     name = models.CharField(max_length=256)
     file = models.FileField()
     upload_time = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name

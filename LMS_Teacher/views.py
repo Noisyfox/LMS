@@ -109,7 +109,7 @@ class MaterialListView(TeacherMixin, UnitQueryMixin, ListView):
 class MaterialCreateView(TeacherMixin, UnitQueryMixin, CreateView):
     template_name = 'LMS_Teacher/unit_material_edit.html'
     model = Material
-    fields = ['name', 'file']
+    fields = ['name', 'description', 'file']
 
     def form_valid(self, form):
         mat = form.save(commit=False)
@@ -124,7 +124,7 @@ class MaterialCreateView(TeacherMixin, UnitQueryMixin, CreateView):
 class MaterialEditView(TeacherMixin, MaterialQueryMixin, UpdateView):
     template_name = 'LMS_Teacher/unit_material_edit.html'
     model = Material
-    fields = ['name', 'file']
+    fields = ['name', 'description', 'file']
 
     def get_object(self, queryset=None):
         return self.material
