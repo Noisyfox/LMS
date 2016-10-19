@@ -35,6 +35,8 @@ class Student(models.Model):
     year = models.IntegerField()
     start_date = models.DateField(auto_now=True)
 
+    enrolled_unit = models.ManyToManyField('Unit', blank=True)
+
     def __str__(self):
         return self.user.username
 

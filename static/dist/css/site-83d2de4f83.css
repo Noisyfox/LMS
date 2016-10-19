@@ -8911,6 +8911,18 @@ body.tec-unit-mail .tec-unit-mail {
   background-color: #337ab7;
   border-color: #337ab7;
 }
+body.stu-info .stu-info,
+body.stu-unit .stu-unit,
+body.stu-timetable .stu-timetable,
+body.stu-enroll .stu-enroll,
+body.stu-unit-info .stu-unit-info,
+body.stu-unit-material .stu-unit-material,
+body.stu-unit-assignment .stu-unit-assignment {
+  z-index: 2;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
 body {
   padding-top: 50px;
   position: relative;

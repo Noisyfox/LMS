@@ -1,0 +1,50 @@
+{% extends 'LMS_Student/nav_base.html' %}
+
+{% load i18n %}
+
+{% block body_class %}stu stu-enroll{% endblock %}
+
+{% block body %}
+    <div class="row">
+        Your course:
+    </div>
+    <div class="row">
+        <legend>{{ user.student.course }}</legend>
+    </div>
+    <div class="row">
+        <form method="POST">
+            {% csrf_token %}
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>Unit of study</th>
+                    <th>Name</th>
+                    <th>Year</th>
+                    <th>Session</th>
+                    <th>Location</th>
+                    <th>CP</th>
+                    <th><input type="checkbox" disabled/></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if units %}
+                    {% for u in units %}
+                        <tr>
+                            <td>ELECXXXX</td>
+                            <td>{{ u.name }}</td>
+                            <td>{{ u.year }}</td>
+                            <td>{{ u.session }}</td>
+                            <td>{{ u.location }}</td>
+                            <td>{{ u.credit_point }}</td>
+                            <td><input name="unit" value="{{ u.pk }}" type="checkbox" {% if u in user.student.enrolled_unit.all %}
+                                       checked {% endif %}/>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            <input type="submit" class="btn btn-primary pull-right" value="Submit"/>
+        </form>
+    </div>
+{% endblock %}

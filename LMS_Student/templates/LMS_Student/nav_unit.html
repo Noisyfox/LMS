@@ -1,0 +1,22 @@
+{% extends "theme_bootstrap/subnav_base.html" %}
+
+{% load i18n %}
+
+{% block body_class %}student{% endblock %}
+
+{% block subnav %}
+    <div class="panel panel-default">
+        {#    <div class="panel-heading"><strong>{% trans "Account Management" %}</strong></div>#}
+        <div class="list-group">
+            <a class="list-group-item stu-unit-info" href="{% url "lms_tec:unit_info" unit.pk %}">
+                {% trans "Unit Information" %}
+            </a>
+            <a class="list-group-item stu-unit-material" href="{% url 'lms_tec:material' unit.pk %}">
+                {% trans "Materials" %}
+            </a>
+            <a class="list-group-item stu-unit-assignment" href="{% url 'lms_tec:assignment' unit.pk %}">
+                {% trans "Assignments" %}
+            </a>
+        </div>
+    </div>
+{% endblock %}

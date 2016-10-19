@@ -1,0 +1,18 @@
+{% extends 'LMS_Student/nav_base.html' %}
+
+{% load i18n %}
+
+{% block body_class %}stu stu-unit{% endblock %}
+
+{% block body %}
+    {% if units %}
+        <div class="row">
+            <ul class="list-group">
+                {% for u in units %}
+                    <a href="{% url "lms_tec:unit_info" u.pk %}"
+                       class="list-group-item list-group-item-action">{{ u }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
