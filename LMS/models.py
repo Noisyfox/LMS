@@ -62,6 +62,7 @@ class Teacher(models.Model):
 
 
 class Unit(models.Model):
+    code = models.CharField(max_length=16)
     name = models.CharField(max_length=128)
     year = models.IntegerField()
     session = models.IntegerField(choices=((1, 'S1'), (2, 'S2')))
@@ -73,7 +74,7 @@ class Unit(models.Model):
     staff = models.ManyToManyField(Teacher, through='UnitAllocation')
 
     def __str__(self):
-        return self.name
+        return '%s: %s' % (self.code, self.name)
 
 
 DAY_OF_WEEK = (

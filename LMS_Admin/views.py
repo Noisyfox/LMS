@@ -223,7 +223,7 @@ class AdminUnitListView(AdminMixin, ListView):
 class UnitCreateView(AdminMixin, CreateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
-    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
+    fields = ['code', 'name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
     success_url = reverse_lazy('lms_admin:unit')
 
     def get_initial(self):
@@ -239,7 +239,7 @@ class UnitCreateView(AdminMixin, CreateView):
 class UnitEditView(AdminMixin, UpdateView):
     template_name = 'LMS_Admin/unit_edit.html'
     model = Unit
-    fields = ['name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
+    fields = ['code', 'name', 'year', 'session', 'credit_point', 'faculty', 'description', 'location']
     success_url = reverse_lazy('lms_admin:unit')
     pk_url_kwarg = 'unit_id'
 
