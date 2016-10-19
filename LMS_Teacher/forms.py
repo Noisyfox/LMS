@@ -11,4 +11,4 @@ class AssignmentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AssignmentForm, self).__init__(*args, **kwargs)
-        self.fields['due_time'].widget = DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickSeconds": False})
+        self.fields['due_time'].widget = DateTimePicker(options={"format": "YYYY-MM-DD HH:mm"})
