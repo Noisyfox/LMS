@@ -15,6 +15,10 @@ urlpatterns = [
         ])),
         url(r'^assignment/', include([
             url(r'^$', views.AssignmentListView.as_view(), name='assignment'),
+            url(r'^(?P<assignment_id>[0-9]+)/', include([
+                url(r'^$', views.AssignmentFileListView.as_view(), name='assignment_detail'),
+                url(r'^upload/$', views.AssignmentSubmitView.as_view(), name='assignment_submit'),
+            ])),
         ])),
     ])),
 ]

@@ -9,7 +9,7 @@
         <div class="row">
             <ul class="list-group">
                 {% for a in assignments %}
-                    <a href="{% url 'lms_tec:assignment_file' unit.pk a.pk %}"
+                    <a href="{% url 'lms_stu:assignment_detail' unit.pk a.pk %}"
                        class="list-group-item list-group-item-action">{{ a }}</a>
                 {% endfor %}
             </ul>

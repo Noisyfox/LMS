@@ -117,6 +117,7 @@ class AssignmentFile(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     uploader = models.ForeignKey(Student, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
+    file = models.FileField()
     upload_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

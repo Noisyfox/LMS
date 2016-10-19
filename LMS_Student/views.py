@@ -6,12 +6,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from sendfile import sendfile
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material, Assignment
+from LMS.models import Unit, Material, Assignment, AssignmentFile
 from LMS_Student.mixins import StudentMixin
 
 
@@ -55,6 +56,29 @@ class MaterialQueryMixin(UnitQueryMixin):
         ctx = super(MaterialQueryMixin, self).get_context_data(**kwargs)
 
         ctx['material'] = self._material
+
+        return ctx
+
+
+class AssignmentQueryMixin(UnitQueryMixin):
+    def do_query(self, request, *args, **kwargs):
+        super(AssignmentQueryMixin, self).do_query(request, *args, **kwargs)
+
+        assignment = get_object_or_404(Assignment, Q(unit=self.unit) & Q(pk=kwargs['assignment_id']))
+
+        self._assignment = assignment
+
+    @property
+    def assignment(self):
+        if not self._assignment:
+            raise Http404('Unknown assignment.')
+
+        return self._assignment
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AssignmentQueryMixin, self).get_context_data(**kwargs)
+
+        ctx['assignment'] = self._assignment
 
         return ctx
 
@@ -110,3 +134,29 @@ class AssignmentListView(StudentMixin, UnitQueryMixin, ListView):
 
     def get_queryset(self):
         return Assignment.objects.filter(unit=self.unit)
+
+
+class AssignmentFileListView(StudentMixin, AssignmentQueryMixin, ListView):
+    template_name = 'LMS_Student/unit_assignment_detail.html'
+    context_object_name = 'files'
+    allow_empty = True
+
+    def get_queryset(self):
+        return AssignmentFile.objects.filter(Q(assignment=self.assignment) & Q(uploader=self.request.user.student))
+
+
+class AssignmentSubmitView(StudentMixin, AssignmentQueryMixin, CreateView):
+    template_name = 'LMS_Student/unit_assignment_submit.html'
+    model = AssignmentFile
+    fields = ['name', 'file']
+
+    def form_valid(self, form):
+        # TODO: check due time
+        submission = form.save(commit=False)
+        submission.assignment = self.assignment
+        submission.uploader = self.request.user.student
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('lms_stu:assignment_detail',
+                            kwargs={'unit_id': self.unit.pk, 'assignment_id': self.assignment.pk})

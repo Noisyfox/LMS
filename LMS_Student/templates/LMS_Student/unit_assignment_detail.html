@@ -1,0 +1,39 @@
+{% extends 'LMS_Student/nav_unit.html' %}
+
+{% load i18n %}
+
+{% block body_class %}stu stu-unit-assignment{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <legend>Assignment Detail</legend>
+    </div>
+    <div class="row">
+        Due time: {{ assignment.due_time }}
+    </div>
+    <div class="row">
+        {% if assignment.description %}
+            {{ assignment.description }}
+        {% else %}
+            No description.
+        {% endif %}
+    </div>
+    <br/>
+    <div class="row">
+        <legend>Assignment Submissions</legend>
+    </div>
+    <div class="row">
+        <a class="btn btn-primary"
+           href="{% url 'lms_stu:assignment_submit' unit.pk assignment.pk %}">{% trans "New Submission" %}</a>
+    </div>
+    {% if files %}
+        <div class="row">
+            <ul class="list-group">
+                {% for f in files %}
+                    <a href=""
+                       class="list-group-item list-group-item-action">{{ f }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
