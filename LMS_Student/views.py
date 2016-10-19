@@ -11,7 +11,7 @@ from django.views.generic import ListView
 from sendfile import sendfile
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material
+from LMS.models import Unit, Material, Assignment
 from LMS_Student.mixins import StudentMixin
 
 
@@ -101,3 +101,12 @@ class MaterialListView(StudentMixin, UnitQueryMixin, ListView):
 class MaterialDownloadView(StudentMixin, MaterialQueryMixin, View):
     def get(self, request, *args, **kwargs):
         return sendfile(request, self.material.file.path, attachment=True)
+
+
+class AssignmentListView(StudentMixin, UnitQueryMixin, ListView):
+    template_name = 'LMS_Student/unit_assignment.html'
+    context_object_name = 'assignments'
+    allow_empty = True
+
+    def get_queryset(self):
+        return Assignment.objects.filter(unit=self.unit)

@@ -13,5 +13,8 @@ urlpatterns = [
             url(r'^$', views.MaterialListView.as_view(), name='material'),
             url(r'^(?P<material_id>[0-9]+)/$', views.MaterialDownloadView.as_view(), name='material_download'),
         ])),
+        url(r'^assignment/', include([
+            url(r'^$', views.AssignmentListView.as_view(), name='assignment'),
+        ])),
     ])),
 ]
