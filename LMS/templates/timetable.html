@@ -1,0 +1,14 @@
+{% for d, t in timetable %}
+    <legend>{{ d }}</legend>
+    {% if t %}
+        <ul class="list-group">
+            {% for c in t %}
+                <div class="list-group-item list-group-item-action">
+                    {{ c.fine_str }}
+                </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div>You have no classes on Monday during this semester.</div>
+    {% endif %}
+{% endfor %}

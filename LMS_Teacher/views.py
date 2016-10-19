@@ -10,6 +10,7 @@ from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
 from LMS.models import Unit, Material, Assignment, AssignmentFile
+from LMS.views import BaseTimetableView
 from LMS_Teacher.forms import AssignmentForm
 from LMS_Teacher.mixins import TeacherMixin
 
@@ -87,7 +88,7 @@ class UnitListView(TeacherMixin, ListView):
     allow_empty = True
 
     def get_queryset(self):
-        return Unit.objects.filter(staff=self.request.user.teacher)
+        return self.request.user.teacher.unit_set.all()
 
 
 class UnitInfoView(TeacherMixin, UnitQueryMixin, DetailView):
@@ -193,3 +194,10 @@ class AssignmentFileListView(TeacherMixin, AssignmentQueryMixin, ListView):
 
     def get_queryset(self):
         return AssignmentFile.objects.filter(assignment=self.assignment)
+
+
+class TimetableView(TeacherMixin, BaseTimetableView):
+    template_name = 'LMS_Teacher/timetable.html'
+
+    def get_units(self):
+        return self.request.user.teacher.unit_set.all()

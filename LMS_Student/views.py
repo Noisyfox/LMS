@@ -13,6 +13,7 @@ from sendfile import sendfile
 
 from LMS.mixins import QueryMixin
 from LMS.models import Unit, Material, Assignment, AssignmentFile
+from LMS.views import BaseTimetableView
 from LMS_Student.mixins import StudentMixin
 
 
@@ -160,3 +161,10 @@ class AssignmentSubmitView(StudentMixin, AssignmentQueryMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('lms_stu:assignment_detail',
                             kwargs={'unit_id': self.unit.pk, 'assignment_id': self.assignment.pk})
+
+
+class TimetableView(StudentMixin, BaseTimetableView):
+    template_name = 'LMS_Student/timetable.html'
+
+    def get_units(self):
+        return self.request.user.student.enrolled_unit.all()

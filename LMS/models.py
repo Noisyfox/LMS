@@ -92,7 +92,7 @@ class Class(models.Model):
     TYPE = (
         ('l', 'Lecture'),
         ('t', 'Tutorial'),
-        ('b', 'Lab')
+        ('b', 'Laboratory')
     )
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     day = models.PositiveSmallIntegerField(choices=DAY_OF_WEEK)
@@ -102,6 +102,12 @@ class Class(models.Model):
     end_week = models.PositiveSmallIntegerField()
     type = models.CharField(max_length=1, choices=TYPE)
     location = models.CharField(max_length=128)
+
+    @property
+    def fine_str(self):
+        return '{:%I:%M %p} to {:%I:%M %p}, weeks {}-{}: {} {} in {}' .format(
+            self.start_time, self.end_time, self.start_week, self.end_week, self.unit.code, self.get_type_display(),
+            self.location)
 
 
 class UnitAllocation(models.Model):
