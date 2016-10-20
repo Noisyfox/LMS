@@ -28,5 +28,9 @@ urlpatterns = [
                 url(r'^delete/$', views.AssignmentDeleteView.as_view(), name='assignment_delete'),
             ])),
         ])),
+        url(r'^grade/', include([
+            url(r'^$', views.UnitGradeView.as_view(), name='grade'),
+            url(r'^edit/$', views.UnitGradeEditView.as_view(), name='grade_edit'),
+        ])),
     ]))
 ]

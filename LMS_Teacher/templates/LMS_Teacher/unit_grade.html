@@ -1,0 +1,51 @@
+{% extends 'LMS_Teacher/nav_unit.html' %}
+
+{% load i18n %}
+
+{% block body_class %}tec tec-unit-grade{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th colspan="2">{% trans 'Grades' %} <a href="{% url 'lms_tec:grade_edit' unit.pk %}"
+                                                                class="btn btn-default pull-right">{% trans 'Edit Grade Settings' %}</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{% trans 'Assignment Mark' %}</td>
+                        <td>{{ unit.mark_assignment }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Quiz Mark' %}</td>
+                        <td>{{ unit.mark_quiz }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Presentation Mark' %}</td>
+                        <td>{{ unit.mark_presentation }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Mid Exam Mark' %}</td>
+                        <td>{{ unit.mark_mid_exam }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Final Exam Mark' %}</td>
+                        <td>{{ unit.mark_final_exam }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>{% trans 'Total Mark' %}</th>
+                        <th>{{ unit.total_mark }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

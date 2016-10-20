@@ -11,7 +11,7 @@ from django.views.generic import UpdateView
 from LMS.mixins import QueryMixin
 from LMS.models import Unit, Material, Assignment, AssignmentFile
 from LMS.views import BaseTimetableView
-from LMS_Teacher.forms import AssignmentForm
+from LMS_Teacher.forms import AssignmentForm, GradeEditForm
 from LMS_Teacher.mixins import TeacherMixin
 
 
@@ -201,3 +201,21 @@ class TimetableView(TeacherMixin, BaseTimetableView):
 
     def get_units(self):
         return self.request.user.teacher.unit_set.all()
+
+
+class UnitGradeView(TeacherMixin, UnitQueryMixin, DetailView):
+    template_name = 'LMS_Teacher/unit_grade.html'
+
+    def get_object(self, queryset=None):
+        return self.unit
+
+
+class UnitGradeEditView(TeacherMixin, UnitQueryMixin, UpdateView):
+    template_name = 'LMS_Teacher/unit_grade_edit.html'
+    form_class = GradeEditForm
+
+    def get_object(self, queryset=None):
+        return self.unit
+
+    def get_success_url(self):
+        return reverse_lazy('lms_tec:grade', kwargs={'unit_id': self.unit.pk})
