@@ -31,6 +31,7 @@ urlpatterns = [
         url(r'^grade/', include([
             url(r'^$', views.UnitGradeView.as_view(), name='grade'),
             url(r'^edit/$', views.UnitGradeEditView.as_view(), name='grade_edit'),
+            url(r'^(?P<record_id>[0-9]+)/$', views.UnitGradeMarkView.as_view(), name='grade_mark'),
         ])),
     ]))
 ]

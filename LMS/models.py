@@ -1,4 +1,6 @@
+from decimal import Decimal
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -75,11 +77,11 @@ class Unit(models.Model):
 
     staff = models.ManyToManyField(Teacher, through='UnitAllocation')
 
-    mark_assignment = models.FloatField(default=0)
-    mark_quiz = models.FloatField(default=0)
-    mark_presentation = models.FloatField(default=0)
-    mark_mid_exam = models.FloatField(default=0)
-    mark_final_exam = models.FloatField(default=0)
+    mark_assignment = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_quiz = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_presentation = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_mid_exam = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_final_exam = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
 
     def __str__(self):
         return '%s: %s' % (self.code, self.name)
@@ -175,11 +177,11 @@ class GradeRecord(models.Model):
     student = models.ForeignKey(Student)
     unit = models.ForeignKey(Unit)
 
-    mark_assignment = models.FloatField(default=0)
-    mark_quiz = models.FloatField(default=0)
-    mark_presentation = models.FloatField(default=0)
-    mark_mid_exam = models.FloatField(default=0)
-    mark_final_exam = models.FloatField(default=0)
+    mark_assignment = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_quiz = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_presentation = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_mid_exam = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
+    mark_final_exam = models.FloatField(default=0, validators=[MinValueValidator(Decimal('0'))])
 
     @property
     def total_mark(self):
