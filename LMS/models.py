@@ -37,6 +37,8 @@ class Student(models.Model):
 
     enrolled_unit = models.ManyToManyField('Unit', blank=True)
 
+    grade = models.ManyToManyField('Unit', blank=True, through='GradeRecord', related_name='grade_record')
+
     def __str__(self):
         return self.user.username
 
@@ -73,8 +75,19 @@ class Unit(models.Model):
 
     staff = models.ManyToManyField(Teacher, through='UnitAllocation')
 
+    mark_assignment = models.FloatField(default=0)
+    mark_quiz = models.FloatField(default=0)
+    mark_presentation = models.FloatField(default=0)
+    mark_mid_exam = models.FloatField(default=0)
+    mark_final_exam = models.FloatField(default=0)
+
     def __str__(self):
         return '%s: %s' % (self.code, self.name)
+
+    @property
+    def total_mark(self):
+        return self.mark_assignment + self.mark_quiz + \
+               self.mark_presentation + self.mark_mid_exam + self.mark_final_exam
 
 
 DAY_OF_WEEK = (
@@ -105,7 +118,7 @@ class Class(models.Model):
 
     @property
     def fine_str(self):
-        return '{:%I:%M %p} to {:%I:%M %p}, weeks {}-{}: {} {} in {}' .format(
+        return '{:%I:%M %p} to {:%I:%M %p}, weeks {}-{}: {} {} in {}'.format(
             self.start_time, self.end_time, self.start_week, self.end_week, self.unit.code, self.get_type_display(),
             self.location)
 
@@ -156,3 +169,19 @@ class AssignmentFile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class GradeRecord(models.Model):
+    student = models.ForeignKey(Student)
+    unit = models.ForeignKey(Unit)
+
+    mark_assignment = models.FloatField(default=0)
+    mark_quiz = models.FloatField(default=0)
+    mark_presentation = models.FloatField(default=0)
+    mark_mid_exam = models.FloatField(default=0)
+    mark_final_exam = models.FloatField(default=0)
+
+    @property
+    def total_mark(self):
+        return self.mark_assignment + self.mark_quiz + \
+               self.mark_presentation + self.mark_mid_exam + self.mark_final_exam

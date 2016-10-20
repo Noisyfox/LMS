@@ -12,7 +12,7 @@ from django.views.generic import ListView
 from sendfile import sendfile
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material, Assignment, AssignmentFile
+from LMS.models import Unit, Material, Assignment, AssignmentFile, GradeRecord
 from LMS.views import BaseTimetableView
 from LMS_Student.mixins import StudentMixin
 
@@ -104,14 +104,18 @@ class EnrollListView(StudentMixin, ListView):
         units = Unit.objects.filter(pk__in=unit_id).all()
         self.request.user.student.enrolled_unit = units
         self.request.user.student.save()
+
+        for u in units:
+            grade, _ = GradeRecord.objects.get_or_create(student=self.request.user.student, unit=u)
         return HttpResponseRedirect(reverse_lazy('lms_stu:unit'))
 
 
 class UnitInfoView(StudentMixin, UnitQueryMixin, DetailView):
     template_name = 'LMS_Student/unit_info.html'
+    context_object_name = 'grade'
 
     def get_object(self, queryset=None):
-        return self.unit
+        return GradeRecord.objects.get(unit=self.unit, student=self.request.user.student)
 
 
 class MaterialListView(StudentMixin, UnitQueryMixin, ListView):

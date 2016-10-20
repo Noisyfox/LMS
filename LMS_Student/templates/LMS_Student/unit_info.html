@@ -6,4 +6,61 @@
 
 {% block body %}
     {{ unit }}
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>{% trans 'Grades' %}</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{% trans 'Assignment Mark' %}</td>
+                        <td>{{ grade.mark_assignment }}</td>
+                        <td>{% trans 'out of' %}</td>
+                        <td>{{ unit.mark_assignment }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Quiz Mark' %}</td>
+                        <td>{{ grade.mark_quiz }}</td>
+                        <td>{% trans 'out of' %}</td>
+                        <td>{{ unit.mark_quiz }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Presentation Mark' %}</td>
+                        <td>{{ grade.mark_presentation }}</td>
+                        <td>{% trans 'out of' %}</td>
+                        <td>{{ unit.mark_presentation }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Mid Exam Mark' %}</td>
+                        <td>{{ grade.mark_mid_exam }}</td>
+                        <td>{% trans 'out of' %}</td>
+                        <td>{{ unit.mark_mid_exam }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Final Exam Mark' %}</td>
+                        <td>{{ grade.mark_final_exam }}</td>
+                        <td>{% trans 'out of' %}</td>
+                        <td>{{ unit.mark_final_exam }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>{% trans 'Total Mark' %}</th>
+                        <th>{{ grade.total_mark }}</th>
+                        <th>{% trans 'out of' %}</th>
+                        <th>{{ unit.total_mark }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
