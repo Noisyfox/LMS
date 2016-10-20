@@ -9,7 +9,7 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material, Assignment, AssignmentFile
+from LMS.models import Unit, Material, Assignment, AssignmentFile, GradeRecord
 from LMS.views import BaseTimetableView
 from LMS_Teacher.forms import AssignmentForm, GradeEditForm
 from LMS_Teacher.mixins import TeacherMixin
@@ -203,11 +203,12 @@ class TimetableView(TeacherMixin, BaseTimetableView):
         return self.request.user.teacher.unit_set.all()
 
 
-class UnitGradeView(TeacherMixin, UnitQueryMixin, DetailView):
+class UnitGradeView(TeacherMixin, UnitQueryMixin, ListView):
     template_name = 'LMS_Teacher/unit_grade.html'
+    context_object_name = 'records'
 
-    def get_object(self, queryset=None):
-        return self.unit
+    def get_queryset(self):
+        return GradeRecord.objects.filter(Q(unit=self.unit) & Q(student__in=self.unit.student_set.all()))
 
 
 class UnitGradeEditView(TeacherMixin, UnitQueryMixin, UpdateView):

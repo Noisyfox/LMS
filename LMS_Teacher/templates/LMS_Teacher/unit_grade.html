@@ -47,5 +47,39 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{% trans 'Student' %}</th>
+                        <th>{% trans 'Assignment' %}</th>
+                        <th>{% trans 'Quiz' %}</th>
+                        <th>{% trans 'Presentation' %}</th>
+                        <th>{% trans 'Mid Exam' %}</th>
+                        <th>{% trans 'Final Exam' %}</th>
+                        <th>{% trans 'Total' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if records %}
+                        {% for r in records %}
+                            <tr>
+                                <td><a href=""> <i class="glyphicon glyphicon-stats"></i></a></td>
+                                <td>{{ r.student }}</td>
+                                <td>{{ r.mark_assignment }}</td>
+                                <td>{{ r.mark_quiz }}</td>
+                                <td>{{ r.mark_presentation }}</td>
+                                <td>{{ r.mark_mid_exam }}</td>
+                                <td>{{ r.mark_final_exam }}</td>
+                                <td>{{ r.total_mark }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
