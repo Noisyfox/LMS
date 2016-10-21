@@ -33,5 +33,6 @@ urlpatterns = [
             url(r'^edit/$', views.UnitGradeEditView.as_view(), name='grade_edit'),
             url(r'^(?P<record_id>[0-9]+)/$', views.UnitGradeMarkView.as_view(), name='grade_mark'),
         ])),
+        url(r"^email/$", views.UnitEmailView.as_view(), name="email"),
     ]))
 ]

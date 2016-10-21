@@ -1,15 +1,18 @@
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from django.views.generic import TemplateView
 from django.views.generic import UpdateView
 
 from LMS.mixins import QueryMixin
-from LMS.models import Unit, Material, Assignment, AssignmentFile, GradeRecord
+from LMS.models import Unit, Material, Assignment, AssignmentFile, GradeRecord, Student
 from LMS.views import BaseTimetableView
 from LMS_Teacher.forms import AssignmentForm, GradeEditForm, GradeRecordForm
 from LMS_Teacher.mixins import TeacherMixin
@@ -232,3 +235,23 @@ class UnitGradeMarkView(TeacherMixin, UnitQueryMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('lms_tec:grade', kwargs={'unit_id': self.unit.pk})
+
+
+class UnitEmailView(TeacherMixin, UnitQueryMixin, ListView):
+    template_name = 'LMS_Teacher/unit_email.html'
+    context_object_name = 'students'
+    allow_empty = True
+
+    def get_queryset(self):
+        return self.unit.student_set.all()
+
+    def post(self, request, *args, **kwargs):
+        student_id = request.POST.getlist('student')
+        subject = request.POST['subject']
+        content = request.POST['mail_content']
+
+        recipient = [s.user.email for s in Student.objects.filter(pk__in=student_id)]
+
+        send_mail(subject, content, 'teacher@lms.com', recipient)
+
+        return HttpResponseRedirect(reverse_lazy('lms_tec:email', kwargs={'unit_id': self.unit.pk}))

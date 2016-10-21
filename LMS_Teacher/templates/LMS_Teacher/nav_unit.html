@@ -20,7 +20,7 @@
             <a class="list-group-item tec-unit-grade" href="{% url 'lms_tec:grade' unit.pk %}">
                 {% trans "Grades" %}
             </a>
-            <a class="list-group-item tec-unit-mail" href="{% url 'lms_admin:account_teacher' %}">
+            <a class="list-group-item tec-unit-mail" href="{% url 'lms_tec:email' unit.pk %}">
                 {% trans "Mail" %}
             </a>
         </div>

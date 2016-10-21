@@ -1,0 +1,39 @@
+{% extends 'LMS_Teacher/nav_unit.html' %}
+
+{% load i18n %}
+
+{% block body_class %}tec tec-unit-mail{% endblock %}
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="col-lg-2">
+            <div class="row"><span>To:</span></div>
+            {% if students %}
+                <div class="checkbox">
+                    {% for s in students %}
+                        <div class="row">
+                            <label><input type="checkbox" name="student" value="{{ s.pk }}">{{ s }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-10">
+            <div class="form-horizontal">
+                <div class="form-group ">
+                    <label for="subject" class="col-sm-1 control-label pull-left">{% trans 'Subject' %}</label>
+                    <div class="col-sm-11">
+                        <input type="text" id="subject" name="subject" class="form-control" required/>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-sm-12">
+                        <textarea name="mail_content" class="form-control" rows="20" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">{% trans "Send" %}</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
