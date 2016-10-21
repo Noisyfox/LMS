@@ -56,6 +56,7 @@ class StudentCreateView(AdminMixin, FormView):
         user.username = generate_uid(first_name, last_name)
         user.first_name = first_name
         user.last_name = last_name
+        user.email = form.cleaned_data['email']
         user.set_password(form.cleaned_data['password'])
         user.save()
 
@@ -93,6 +94,7 @@ class StudentEditView(AdminMixin, FormView):
             'year': student.year,
             'course': student.course,
             'start_date': student.start_date,
+            'email': student.user.email,
         })
 
         return init
@@ -108,6 +110,7 @@ class StudentEditView(AdminMixin, FormView):
 
         user.first_name = form.cleaned_data['first_name']
         user.last_name = form.cleaned_data['last_name']
+        user.email = form.cleaned_data['email']
         if 'password' in form.cleaned_data:
             user.set_password(form.cleaned_data['password'])
         user.save()

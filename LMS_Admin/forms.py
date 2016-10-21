@@ -16,6 +16,7 @@ class StudentEditForm(forms.Form):
     year = forms.IntegerField(label=_('Year'))
     course = forms.ModelChoiceField(queryset=Course.objects.all(), label=_('Course'))
     start_date = forms.DateField(label=_('Start Date'), widget=DateInput())
+    email = forms.EmailField(label=_('Email'))
     password = forms.CharField(label=_('Password'))
 
 
