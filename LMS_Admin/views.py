@@ -111,7 +111,7 @@ class StudentEditView(AdminMixin, FormView):
         user.first_name = form.cleaned_data['first_name']
         user.last_name = form.cleaned_data['last_name']
         user.email = form.cleaned_data['email']
-        if 'password' in form.cleaned_data:
+        if 'password' in form.cleaned_data and form.cleaned_data['password']:
             user.set_password(form.cleaned_data['password'])
         user.save()
 
@@ -204,7 +204,7 @@ class TeacherEditView(AdminMixin, FormView):
 
         user.first_name = form.cleaned_data['first_name']
         user.last_name = form.cleaned_data['last_name']
-        if 'password' in form.cleaned_data:
+        if 'password' in form.cleaned_data and form.cleaned_data['password']:
             user.set_password(form.cleaned_data['password'])
         user.save()
 
