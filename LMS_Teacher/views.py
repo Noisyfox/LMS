@@ -20,7 +20,7 @@ from LMS_Teacher.mixins import TeacherMixin
 
 class UnitQueryMixin(QueryMixin):
     def do_query(self, request, *args, **kwargs):
-        unit = get_object_or_404(Unit, Q(staff=self.request.user.teacher) & Q(pk=kwargs['unit_id']))
+        unit = get_object_or_404(self.request.user.teacher.unit_set.distinct(), pk=kwargs['unit_id'])
 
         self._unit = unit
 
@@ -91,7 +91,7 @@ class UnitListView(TeacherMixin, ListView):
     allow_empty = True
 
     def get_queryset(self):
-        return self.request.user.teacher.unit_set.all()
+        return self.request.user.teacher.unit_set.distinct()
 
 
 class UnitInfoView(TeacherMixin, UnitQueryMixin, DetailView):
