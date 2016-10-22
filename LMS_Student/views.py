@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from django.views.generic import TemplateView
 from sendfile import sendfile
 
 from LMS.mixins import QueryMixin
@@ -172,3 +173,7 @@ class TimetableView(StudentMixin, BaseTimetableView):
 
     def get_units(self):
         return self.request.user.student.enrolled_unit.all()
+
+
+class PersonalInfoView(StudentMixin, TemplateView):
+    template_name = 'LMS_Student/personal_info.html'

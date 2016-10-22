@@ -6,7 +6,7 @@ from LMS_Teacher import views
 app_name = 'lms_tec'
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(pattern_name='lms_tec:unit'), name='home'),
+    url(r'^$', views.PersonalInfoView.as_view(), name='home'),
     url(r'^my_units/$', views.UnitListView.as_view(), name='unit'),
     url(r"^timetable/$", views.TimetableView.as_view(), name="timetable"),
     url(r'^unit/(?P<unit_id>[0-9]+)/', include([

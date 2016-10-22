@@ -255,3 +255,7 @@ class UnitEmailView(TeacherMixin, UnitQueryMixin, ListView):
         send_mail(subject, content, 'teacher@lms.com', recipient)
 
         return HttpResponseRedirect(reverse_lazy('lms_tec:email', kwargs={'unit_id': self.unit.pk}))
+
+
+class PersonalInfoView(TeacherMixin, TemplateView):
+    template_name = 'LMS_Teacher/personal_info.html'

@@ -6,7 +6,7 @@ from LMS_Student import views
 app_name = 'lms_stu'
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(pattern_name='lms_stu:unit'), name='home'),
+    url(r'^$', views.PersonalInfoView.as_view(), name='home'),
     url(r'^my_units/$', views.UnitListView.as_view(), name='unit'),
     url(r'^enroll/$', views.EnrollListView.as_view(), name='enroll'),
     url(r"^timetable/$", views.TimetableView.as_view(), name="timetable"),
