@@ -11,7 +11,7 @@
         "pk": 2,
         "model": "sites.site",
         "fields": {
-            "domain": "example.com",
+            "domain": "ec2-54-206-43-58.ap-southeast-2.compute.amazonaws.com",
             "name": "Fox University LMS"
         }
     }

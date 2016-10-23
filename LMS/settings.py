@@ -6,7 +6,12 @@ BASE_DIR = PACKAGE_ROOT
 
 DEBUG = True
 
+DEPLOY = False
+
 DB_LOCAL = True
+
+if DEPLOY:
+    DB_LOCAL = False
 
 if DB_LOCAL:
     DATABASES = {
@@ -41,7 +46,10 @@ TIME_ZONE = "UTC"
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = "en-us"
 
-SITE_ID = int(os.environ.get("SITE_ID", 1))
+if DEPLOY:
+    SITE_ID = int(os.environ.get("SITE_ID", 2))
+else:
+    SITE_ID = int(os.environ.get("SITE_ID", 1))
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
